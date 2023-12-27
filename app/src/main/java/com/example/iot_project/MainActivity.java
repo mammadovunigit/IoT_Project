@@ -5,6 +5,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.google.android.material.tabs.TabLayout;
+
 import org.eclipse.paho.android.service.MqttAndroidClient;
 import org.eclipse.paho.client.mqttv3.IMqttActionListener;
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
@@ -61,8 +63,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void messageArrived(String topic, MqttMessage message) throws
                     Exception {
-                String newMessage = new String(message.getPayload());
-                System.out.println("Incoming message: " + newMessage);
+                String parkingSpotAvailabeFromBackend = new String(message.getPayload());
+                //System.out.println("Incoming message: " + parkingSpotAvailabeFromBackend);
 
                 if(topic.equalsIgnoreCase("PARKING-AVAILABILITY-1")){
                     availableParkingSpaces.add("1");
@@ -73,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
                 if(topic.equalsIgnoreCase("PARKING-AVAILABILITY-3")){
                     availableParkingSpaces.add("15");
                 }
-                handleParkingAvailability(newMessage);
+                handleParkingAvailability(parkingSpotAvailabeFromBackend);
                 //availableParkingSpaces.add("Space "+newMessage.trim());
                      /* add code here to interact with elements
                      (text views, buttons)
@@ -136,6 +138,33 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+
+    private void unsubscribe(String topicToSubscribe) {
+        final String topic = topicToSubscribe;
+        int qos = 1;
+        try {
+            IMqttToken subToken1 =client.unsubscribe(topic);
+            subToken1.waitForCompletion(6500);
+            subToken1.setActionCallback(new IMqttActionListener() {
+                @Override
+                public void onSuccess(IMqttToken asyncActionToken) {
+                    System.out.println("Unsubscribed successfully: " + topic);
+                }
+                @Override
+                public void onFailure(IMqttToken asyncActionToken,
+                                      Throwable exception) {
+                    System.out.println("Failed to unsubscribe to topic: " + topic);
+
+                }
+
+            });
+
+
+        } catch (MqttException e) {
+            e.printStackTrace();
+        }
+    }
+
     private void calculateAndBookNearestAvailableSpot() {
         // Implement logic to calculate distances from Sensor 1 to Sensor 2 and Sensor 1 to Sensor 15
         // Then, book the nearest available parking spot among Sensor 2 and Sensor 15
@@ -161,13 +190,15 @@ public class MainActivity extends AppCompatActivity {
         if ((distanceToSensor2 < distanceToSensor15) && availableParkingSpaces.contains("2")) {
             bookParkingSpot("sensor2"); // Replace with the actual logic to book sensor 2
             availableParkingSpaces.remove("2");
+            unsubscribe("PARKING-AVAILABILITY-2");
         } else if(availableParkingSpaces.contains("15")) {
             bookParkingSpot("sensor15"); // Replace with the actual logic to book sensor 15
             availableParkingSpaces.remove("15");
+            unsubscribe("PARKING-AVAILABILITY-3");
         }
         else{
             System.out.println("All Slots filled");
-
+            //Subscribe to all three topics again.
         }
     }
 
@@ -178,16 +209,18 @@ public class MainActivity extends AppCompatActivity {
         // This can be a placeholder, and you may need to replace it with the actual booking logic
         // Example: Display a message or send a request to book the parking spot
         System.out.println("Booking parking spot: " + sensorId);
-        availableParkingSpaces.add("Space "+sensorId.trim());
+
     }
 
-    private void handleParkingAvailability(String payload) {
+    private void handleParkingAvailability(String parkingSpotAvailabeFromBackend) {
         // Implement logic to check availability and book the nearest available parking spot
         // Assume payload contains availability information, e.g., "available" or "unavailable"
-        if (payload.equals("1") && availableParkingSpaces.contains("1")) {
+        if (parkingSpotAvailabeFromBackend.equals("1") && availableParkingSpaces.contains("1")) {
             // Parking spot is available, implement booking logic here
             bookParkingSpot("sensor1"); // Replace with the actual logic to book sensor 1
             availableParkingSpaces.remove("1");
+            unsubscribe("PARKING-AVAILABILITY-1");
+
         } else {
             // Parking spot is not available, calculate distances and book the nearest available spot
             calculateAndBookNearestAvailableSpot();
