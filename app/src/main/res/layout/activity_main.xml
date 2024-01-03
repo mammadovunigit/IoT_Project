@@ -6,19 +6,20 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".MainActivity">
+        tools:context=".MainActivity"
+        tools:layout_editor_absoluteX="75dp"
+        tools:layout_editor_absoluteY="-61dp">
 
         <TextView
             android:id="@+id/textView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Available Parking Spots"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="50dp"
+            android:text="Available Parking Spots"
             android:textSize="20sp"
             android:textStyle="bold" />
 
@@ -26,11 +27,24 @@
             android:id="@+id/bookParkingButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Book Parking Spot"
             android:layout_below="@id/textView"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="20dp"
-            android:padding="10dp" />
+            android:padding="10dp"
+            android:text="Book Parking Spot" />
+
+        <TextView
+            android:id="@+id/sensorNumberTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/bookParkingButton"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp"
+            android:text="Booked Parking Spot: "
+            android:textSize="20sp"
+            android:textStyle="bold"
+            />
+
 
     </RelativeLayout>
 
