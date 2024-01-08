@@ -91,13 +91,10 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void run() {
                         if (topic.equalsIgnoreCase("PARKING-AVAILABILITY-1")) {
-                            //handleParkingAvailability("1");
                             availableParkingSpaces.add("1");
                         } else if (topic.equalsIgnoreCase("PARKING-AVAILABILITY-2")) {
-                            //handleParkingAvailability("2");
                             availableParkingSpaces.add("2");
                         } else if (topic.equalsIgnoreCase("PARKING-AVAILABILITY-3")) {
-                            //handleParkingAvailability("15");
                             availableParkingSpaces.add("3");
                         }
                         availableParkingSpotsTextView.setText("Available Parking Spots: " + availableParkingSpaces.size());
@@ -119,7 +116,7 @@ public class MainActivity extends AppCompatActivity {
                             // Display the success message
                             availableParkingSpotsTextView.setText("Parking spot booked successfully!");
                             // Update the sensorNumberTextView with the booked sensor number
-                            sensorNumberTextView.setText("Booked Sensor Number: " + getBookedSensorNumber(bookedSpot));
+                           // sensorNumberTextView.setText("Booked Sensor Number: " + getBookedSensorNumber(bookedSpot));
                         }
                     }
                 });
@@ -216,19 +213,20 @@ public class MainActivity extends AppCompatActivity {
 
         // Book the nearest available parking spot
         if ((distanceToSensor2 < distanceToSensor15) && availableParkingSpaces.contains("2")) {
-            bookParkingSpot("sensor2"); // Replace with the actual logic to book sensor 2
+
+            //bookParkingSpot("sensor2"); // Replace with the actual logic to book sensor 2
             availableParkingSpaces.remove("2");
             bookedSpot = 2;
             unsubscribe("PARKING-AVAILABILITY-2");
             availableParkingSpotsTextView.setText("Available Parking Spots: " + availableParkingSpaces.size());
-            sensorNumberTextView.setText("Book Slot is : " + bookedSpot);
+            sensorNumberTextView.setText("Booked Spot is : " + bookedSpot);
         } else if (availableParkingSpaces.contains("15")) {
-            bookParkingSpot("sensor15"); // Replace with the actual logic to book sensor 15
+            //bookParkingSpot("sensor15"); // Replace with the actual logic to book sensor 15
             availableParkingSpaces.remove("3");
             bookedSpot = 3;
             unsubscribe("PARKING-AVAILABILITY-3");
             availableParkingSpotsTextView.setText("Available Parking Spots: " + availableParkingSpaces.size());
-            sensorNumberTextView.setText("Book Slot is : " + bookedSpot);
+            sensorNumberTextView.setText("Booked Spot is : " + bookedSpot);
         } else {
             // No available parking spots
             runOnUiThread(new Runnable() {
@@ -246,7 +244,7 @@ public class MainActivity extends AppCompatActivity {
         // Implement logic to book the parking spot with the given sensorId
         // This can be a placeholder, and you may need to replace it with the actual booking logic
         // Example: Display a message or send a request to book the parking spot
-        System.out.println("Booking parking spot: " + sensorId);
+        //System.out.println("Booking parking spot: " + sensorId);
     }
 
     private void handleParkingAvailability(String parkingSpotAvailabeFromBackend) {
@@ -254,11 +252,11 @@ public class MainActivity extends AppCompatActivity {
         // Assume payload contains availability information, e.g., "available" or "unavailable"
         if (parkingSpotAvailabeFromBackend.equals("1") && availableParkingSpaces.contains("1")) {
             // Parking spot is available, implement booking logic here
-            bookParkingSpot("sensor1"); // Replace with the actual logic to book sensor 1
+           // bookParkingSpot("sensor1"); // Replace with the actual logic to book sensor 1
             availableParkingSpaces.remove("1");
             bookedSpot = 1;
             availableParkingSpotsTextView.setText("Available Parking Spots: " + availableParkingSpaces.size());
-            sensorNumberTextView.setText("Book Slot is : " + bookedSpot);
+            sensorNumberTextView.setText("Booked Slot is : " + bookedSpot);
             unsubscribe("PARKING-AVAILABILITY-1");
         } else {
             // Parking spot is not available, calculate distances and book the nearest available spot
@@ -279,10 +277,10 @@ public class MainActivity extends AppCompatActivity {
         return earthRadius * c * 1000; // Distance in meters
     }
 
-    private String getBookedSensorNumber(int spot) {
+    //private String getBookedSensorNumber(int spot) {
         // Implement logic to get the booked sensor number
         // You may need to replace it with the actual logic based on your booking implementation
         // For now, returning a placeholder value
-        return "sensor:" +spot; // Replace with the actual booked sensor number
+      //  return "sensor:" +spot; // Replace with the actual booked sensor number
     }
-}
+//}
